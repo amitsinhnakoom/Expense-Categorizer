@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Categorizer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f4f8;
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 860px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .header-text { flex: 1; }
+    .header-text h1 { font-size: 1.75rem; font-weight: 700; color: #0f172a; }
+    .header-text p  { margin-top: 0.25rem; color: #475569; font-size: 0.95rem; }
+
+    /* ── Status pill ── */
+    #statusPill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-top: 0.6rem;
+      background: #fef3c7;
+      color: #92400e;
+    }
+    #statusPill.ok   { background: #dcfce7; color: #166534; }
+    #statusPill.fail { background: #fee2e2; color: #991b1b; }
+    #statusDot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      max-width: 860px;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #0f172a;
+    }
+
+    /* ── Instructions ── */
+    .instructions ol {
+      padding-left: 1.25rem;
+      line-height: 1.9;
+      color: #334155;
+      font-size: 0.92rem;
+    }
+    .instructions code {
+      background: #f1f5f9;
+      border-radius: 4px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.85rem;
+      font-family: "SF Mono", Menlo, monospace;
+    }
+    .tip {
+      margin-top: 0.85rem;
+      padding: 0.7rem 1rem;
+      background: #eff6ff;
+      border-left: 3px solid #3b82f6;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: #1e40af;
+    }
+
+    /* ── Upload zone ── */
+    .drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .drop-zone.hover { background: #f0f9ff; border-color: #38bdf8; }
+    .drop-zone input[type="file"] { display: none; }
+    .drop-zone .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    #fileLabel { margin-top: 0.4rem; font-weight: 600; color: #0ea5e9; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      padding: 0.55rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #2563eb; }
+    .btn-secondary { background: #e2e8f0; color: #475569; }
+    .btn-secondary:hover:not(:disabled) { background: #cbd5e1; }
+
+    /* ── Results panel ── */
+    #resultsSection { display: none; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .results-header h2 { font-size: 1rem; font-weight: 600; }
+    .results-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Metric chips ── */
+    .metrics { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .metric-chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    .metric-chip span:first-child { color: #64748b; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .metric-chip span:last-child  { font-weight: 700; color: #0f172a; font-size: 1rem; }
+    .metric-chip.pass span:last-child { color: #16a34a; }
+    .metric-chip.fail span:last-child { color: #dc2626; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .filter-btn {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: #475569;
+      transition: all 0.12s;
+    }
+    .filter-btn.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: #fff;
+    }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead { background: #f8fafc; }
+    th { padding: 0.65rem 1rem; text-align: left; font-weight: 600; color: #475569; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e2e8f0; }
+    td { padding: 0.7rem 1rem; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* ── Category badge ── */
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .badge-Food        { background: #dcfce7; color: #15803d; }
+    .badge-Rent        { background: #dbeafe; color: #1d4ed8; }
+    .badge-Luxuries    { background: #fce7f3; color: #be185d; }
+    .badge-Utilities   { background: #fef9c3; color: #a16207; }
+    .badge-Transport   { background: #e0f2fe; color: #0369a1; }
+    .badge-Healthcare  { background: #f3e8ff; color: #7e22ce; }
+    .badge-Misc        { background: #f1f5f9; color: #475569; }
+    .badge-Uncategorized { background: #fee2e2; color: #b91c1c; }
+
+    /* ── Empty state ── */
+    .empty-state { text-align: center; padding: 2.5rem; color: #94a3b8; font-size: 0.9rem; }
+
+    /* ── Close buttons ── */
+    .btn-close {
+      background: none;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.82rem;
+      color: #64748b;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-close:hover { background: #fee2e2; border-color: #fca5a5; color: #b91c1c; }
+
+    .btn-close-window {
+      background: #fff;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.82rem;
+      color: #b91c1c;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: background 0.12s;
+    }
+    .btn-close-window:hover { background: #fee2e2; }
+
+    /* ── Close modal overlay ── */
+    #closeModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    #closeModal.show { display: flex; }
+    .close-modal-box {
+      background: #fff;
+      border-radius: 14px;
+      padding: 2rem 2.25rem;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    .close-modal-box .modal-icon { font-size: 2.25rem; margin-bottom: 0.6rem; }
+    .close-modal-box h3 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem; }
+    .close-modal-box p  { color: #475569; font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem; }
+    .shortcut-pill {
+      display: inline-block;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 0.2rem 0.6rem;
+      font-family: "SF Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    .modal-actions { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Error banner ── */
+    #errorBanner {
+      display: none;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #991b1b;
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-text">
+      <h1>Expense Categorizer</h1>
+      <p>Upload a CSV of bank transactions and tag them automatically by keyword rules.</p>
+      <div id="statusPill"><span id="statusDot"></span><span id="statusText">Detecting backend…</span></div>
+    </div>
+    <button class="btn-close-window" onclick="closeWindow()" title="Close this window">&#x2715; Close Window</button>
+  </header>
+
+  <!-- Instructions card -->
+  <div class="card instructions">
+    <h2>How to use</h2>
+    <ol>
+      <li>Ensure the backend API is running by executing <code>./start_backend.sh</code> from the project root.</li>
+      <li>Prepare a CSV file with at least two columns: <code>description</code> and <code>amount</code>.</li>
+      <li>Optional columns: <code>date</code>, <code>currency</code>, <code>labeled_category</code> (for accuracy scoring).</li>
+      <li>Click <strong>Choose CSV file</strong> or drag and drop your file into the upload zone.</li>
+      <li>Click <strong>Categorize</strong> to process the file.</li>
+      <li>Review results in the table. Use category filter buttons to focus on specific groups.</li>
+      <li>Click <strong>Close Results</strong> to reset and upload another file.</li>
+    </ol>
+    <div class="tip">
+      Example input: <code>description = "Paid $12.50 at Corner Cafe."</code> &rarr; Expected tag: <strong>Food</strong>
+    </div>
+  </div>
+
+  <!-- Upload card -->
+  <div class="card" id="uploadCard">
+    <h2>Upload transactions</h2>
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFile').click()">
+      <div class="icon">&#128196;</div>
+      <div>Drag &amp; drop your CSV here, or click to browse</div>
+      <div id="fileLabel">No file selected</div>
+      <input type="file" id="csvFile" accept=".csv" onchange="onFileSelected(this)" />
+    </div>
+    <div id="errorBanner"></div>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <button class="btn btn-primary" id="categorizeBtn" onclick="uploadCsv()" disabled>Categorize</button>
+      <button class="btn btn-secondary" id="sampleBtn" onclick="runSampleTest()">Try sample input</button>
+    </div>
+  </div>
+
+  <!-- Results card -->
+  <div class="card" id="resultsSection">
+    <div class="results-header">
+      <h2>Results</h2>
+      <div class="results-actions">
+        <button class="btn btn-secondary" id="exportCsvBtn" onclick="exportCsv()" disabled>Export CSV</button>
+        <button class="btn-close" onclick="closeResults()">&#x2715; Close Results</button>
+      </div>
+    </div>
+
+    <div class="metrics" id="metricsBar"></div>
+
+    <div class="filter-bar" id="filterBar"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Rule matched</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">No transactions match this filter.</div>
+    </div>
+  </div>
+
+  <script>
+    let backendBaseUrl = null;
+    let allTransactions  = [];
+    let activeFilter = 'All';
+
+    // ── Backend detection ──────────────────────────────────────
+    const CANDIDATES = [
+      window.location.origin,
+      'http://127.0.0.1:8000',
+      'http://127.0.0.1:8001',
+      'http://127.0.0.1:8002',
+      'http://127.0.0.1:8003',
+      'http://127.0.0.1:8004',
+    ];
+
+    function fetchWithTimeout(url, ms) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(timer));
+    }
+
+    async function detectBackendUrl() {
+      const pill = document.getElementById('statusPill');
+      const txt  = document.getElementById('statusText');
+      pill.className = '';
+      txt.textContent = 'Detecting backend…';
+
+      for (const base of CANDIDATES) {
+        try {
+          const res = await fetchWithTimeout(`${base}/health`, 1500);
+          if (res.ok) {
+            backendBaseUrl = base;
+            txt.innerHTML = `Backend ready at <strong>${base}</strong>`;
+            pill.className = 'ok';
+            // Remove retry button if present
+            const rb = document.getElementById('retryBtn');
+            if (rb) rb.remove();
+            return;
+          }
+        } catch (_) {}
+      }
+
+      // None responded — show failure + retry button
+      backendBaseUrl = null;
+      txt.textContent = 'Backend not found — run launch.command then click Retry';
+      pill.className = 'fail';
+      if (!document.getElementById('retryBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'retryBtn';
+        btn.textContent = '↺ Retry';
+        btn.style.cssText = 'margin-left:0.6rem;padding:0.2rem 0.7rem;border:1px solid #fca5a5;border-radius:6px;background:#fff;color:#b91c1c;font-weight:600;cursor:pointer;font-size:0.8rem;';
+        btn.onclick = detectBackendUrl;
+        pill.parentNode.insertBefore(btn, pill.nextSibling);
+      }
+    }
+
+    // ── File picker ────────────────────────────────────────────
+    function onFileSelected(input) {
+      const label = document.getElementById('fileLabel');
+      const btn   = document.getElementById('categorizeBtn');
+      if (input.files.length) {
+        label.textContent = input.files[0].name;
+        btn.disabled = false;
+      }
+    }
+
+    // Drag-and-drop
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('hover'); });
+    dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('hover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('hover');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const input = document.getElementById('csvFile');
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      onFileSelected(input);
+    });
+
+    // ── Upload CSV ─────────────────────────────────────────────
+    async function uploadCsv() {
+      clearError();
+      const file = document.getElementById('csvFile').files[0];
+      if (!file) return;
+      if (!backendBaseUrl) {
+        await detectBackendUrl();
+        if (!backendBaseUrl) { showError('Backend not reachable. Start the server via launch.command then click Retry.'); return; }
+      }
+      const btn = document.getElementById('categorizeBtn');
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        const res  = await fetch(`${backendBaseUrl}/upload-csv`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) { showError(JSON.stringify(data.detail ?? data)); return; }
+        renderResults(data);
+      } catch (err) {
+        showError('Could not reach backend. Is the API server running?');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Categorize';
+      }
+    }
+
+    // ── Sample test (acceptance scenario) ─────────────────────
+    async function runSampleTest() {
+      clearError();      if (!backendBaseUrl) {
+        await detectBackendUrl();
+        if (!backendBaseUrl) { showError('Backend not reachable. Start the server via launch.command then click Retry.'); return; }
+      }      const payload = [
+        'Paid $12.50 at Corner Cafe.',
+        'Netflix monthly subscription -16.99',
+        'Landlord Corp rent payment -1250',
+        'Starbucks Seattle -5.80',
+        'Random unknown vendor -42.00',
+      ];
+      try {
+        const res  = await fetch(`${backendBaseUrl}/categorize-text`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) { showError(JSON.stringify(data.detail ?? data)); return; }
+        renderResults(data);
+      } catch (err) {
+        showError('Could not reach backend. Is the API server running?');
+      }
+    }
+
+    // ── Render results ─────────────────────────────────────────
+    function renderResults(data) {
+      allTransactions = data.transactions;
+      activeFilter = 'All';
+      document.getElementById('exportCsvBtn').disabled = !allTransactions.length;
+
+      // Metrics bar
+      const bar = document.getElementById('metricsBar');
+      const coverageClass    = data.coverage_percent    >= 80 ? 'pass' : 'fail';
+      const correctnessClass = data.correctness_percent != null
+        ? (data.correctness_percent >= 80 ? 'pass' : 'fail') : '';
+      bar.innerHTML = `
+        <div class="metric-chip">
+          <span>Total rows</span><span>${data.total_count}</span>
+        </div>
+        <div class="metric-chip ${coverageClass}">
+          <span>Coverage</span><span>${data.coverage_percent.toFixed(1)}%</span>
+        </div>
+        <div class="metric-chip">
+          <span>Categorized</span><span>${data.categorized_count}</span>
+        </div>
+        <div class="metric-chip">
+          <span>Uncategorized</span><span>${data.uncategorized_count}</span>
+        </div>
+        ${data.correctness_percent != null ? `
+        <div class="metric-chip ${correctnessClass}">
+          <span>Correctness</span><span>${data.correctness_percent.toFixed(1)}%</span>
+        </div>` : ''}
+      `;
+
+      // Build category filter buttons
+      const categories = ['All', ...new Set(allTransactions.map(t => t.predicted_category))];
+      const fb = document.getElementById('filterBar');
+      fb.innerHTML = categories.map(c =>
+        `<button class="filter-btn ${c === 'All' ? 'active' : ''}" onclick="setFilter('${c}')">${c}</button>`
+      ).join('');
+
+      renderTable();
+
+      document.getElementById('resultsSection').style.display = 'block';
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function setFilter(cat) {
+      activeFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(b =>
+        b.classList.toggle('active', b.textContent === cat)
+      );
+      renderTable();
+    }
+
+    function renderTable() {
+      const rows = activeFilter === 'All'
+        ? allTransactions
+        : allTransactions.filter(t => t.predicted_category === activeFilter);
+
+      const empty = document.getElementById('emptyState');
+      const body  = document.getElementById('resultsBody');
+
+      if (!rows.length) {
+        body.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+
+      body.innerHTML = rows.map((t, i) => `
+        <tr>
+          <td style="color:#94a3b8">${i + 1}</td>
+          <td style="max-width:280px;word-break:break-word">${escHtml(t.raw_description)}</td>
+          <td style="font-variant-numeric:tabular-nums">${t.amount.toFixed(2)}</td>
+          <td><span class="badge badge-${t.predicted_category.replace(/\s+/g,'')}">${t.predicted_category}</span></td>
+          <td style="color:#64748b;font-size:0.82rem">${t.matched_rule_id ?? '—'}</td>
+          <td><span class="badge badge-${t.status === 'categorized' ? 'Food' : 'Uncategorized'}" style="${t.status==='categorized' ? 'background:#dcfce7;color:#15803d' : 'background:#fee2e2;color:#b91c1c'}">${t.status}</span></td>
+        </tr>`
+      ).join('');
+    }
+
+    function exportCsv() {
+      const rows = activeFilter === 'All'
+        ? allTransactions
+        : allTransactions.filter(t => t.predicted_category === activeFilter);
+
+      if (!rows.length) {
+        showError('No rows available to export for the selected filter.');
+        return;
+      }
+
+      const headers = ['#', 'Description', 'Amount', 'Category', 'Rule matched', 'Status'];
+      const lines = [headers.map(csvEscape).join(',')];
+
+      rows.forEach((t, i) => {
+        lines.push([
+          i + 1,
+          t.raw_description,
+          Number(t.amount).toFixed(2),
+          t.predicted_category,
+          t.matched_rule_id ?? '',
+          t.status,
+        ].map(csvEscape).join(','));
+      });
+
+      const csvContent = lines.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const ts = new Date().toISOString().replace(/[:.]/g, '-');
+      const filterTag = activeFilter === 'All' ? 'all' : activeFilter.toLowerCase().replace(/\s+/g, '-');
+      a.href = url;
+      a.download = `categorized_expenses_${filterTag}_${ts}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Close results ──────────────────────────────────────────
+    function closeResults() {
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('exportCsvBtn').disabled = true;
+      const input = document.getElementById('csvFile');
+      input.value = '';
+      document.getElementById('fileLabel').textContent = 'No file selected';
+      document.getElementById('categorizeBtn').disabled = true;
+      allTransactions = [];
+      document.getElementById('uploadCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── Helpers ────────────────────────────────────────────────
+    function showError(msg) {
+      const el = document.getElementById('errorBanner');
+      el.textContent = 'Error: ' + msg;
+      el.style.display = 'block';
+    }
+    function clearError() {
+      document.getElementById('errorBanner').style.display = 'none';
+    }
+    function escHtml(str) {
+      return String(str).replace(/[&<>"']/g, c =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
+      );
+    }
+
+    function csvEscape(value) {
+      const text = String(value ?? '');
+      if (/[",\n]/.test(text)) {
+        return '"' + text.replace(/"/g, '""') + '"';
+      }
+      return text;
+    }
+
+    // ── Close window ───────────────────────────────────────────
+    function closeWindow() {
+      // Attempt native close (works when tab was opened by script).
+      window.close();
+      // If still open after 300 ms, the browser blocked it — show helper modal.
+      setTimeout(() => {
+        if (!window.closed) {
+          document.getElementById('closeModal').classList.add('show');
+        }
+      }, 300);
+    }
+
+    function dismissCloseModal() {
+      document.getElementById('closeModal').classList.remove('show');
+    }
+
+    // Close modal on backdrop click.
+    document.getElementById('closeModal').addEventListener('click', function(e) {
+      if (e.target === this) dismissCloseModal();
+    });
+
+    // Close modal on Escape key.
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') dismissCloseModal();
+    });
+
+    detectBackendUrl();
+  </script>
+
+  <!-- Close window helper modal -->
+  <div id="closeModal" role="dialog" aria-modal="true" aria-labelledby="closeModalTitle">
+    <div class="close-modal-box">
+      <div class="modal-icon">&#128274;</div>
+      <h3 id="closeModalTitle">Close this window</h3>
+      <p>
+        Your browser blocked automatic closing because this tab was opened directly.<br/><br/>
+        Use the keyboard shortcut to close it:
+      </p>
+      <p>
+        <span class="shortcut-pill">&#8984; Cmd + W</span>&nbsp; on Mac &nbsp;&nbsp;
+        <span class="shortcut-pill">Ctrl + W</span>&nbsp; on Windows
+      </p>
+      <br/>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="dismissCloseModal()">Stay on page</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

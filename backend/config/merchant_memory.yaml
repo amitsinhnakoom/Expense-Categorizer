@@ -1,0 +1,11 @@
+merchant_memory:
+  starbucks coffee: Food
+  corner cafe: Food
+  netflix subscription: Luxuries
+  netflix family plan: Luxuries
+  landlord corp monthly rent: Rent
+  sunrise property management rent: Rent
+  shell gas station: Transport
+  water utility payment: Utilities
+  cvs pharmacy: Healthcare
+  doordash order: Food

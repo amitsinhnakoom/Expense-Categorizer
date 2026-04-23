@@ -1,0 +1,121 @@
+date,description,amount,currency,labeled_category
+2026-02-02,Paid at Corner Cafe #1,-12.50,USD,Food
+2026-03-03,Netflix Subscription 2,-16.99,USD,Luxuries
+2026-04-04,Landlord Corp Monthly Rent 3,-1250.00,USD,Rent
+2026-05-05,Uber Ride 4,-24.30,USD,Transport
+2026-06-06,Electric Utility Bill 5,-92.10,USD,Utilities
+2026-07-07,City Pharmacy 6,-33.40,USD,Healthcare
+2026-08-08,Grocery Mart Purchase 7,-67.25,USD,Food
+2026-09-09,Unknown Vendor 8,-41.75,USD,Uncategorized
+2026-10-10,Amazon Prime Order 9,-28.60,USD,Luxuries
+2026-11-11,Starbucks Store #10,-5.80,USD,Food
+2026-12-12,Paid at Corner Cafe #11,-12.50,USD,Food
+2026-01-13,Netflix Subscription 12,-16.99,USD,Luxuries
+2026-02-14,Landlord Corp Monthly Rent 13,-1250.00,USD,Rent
+2026-03-15,Uber Ride 14,-24.30,USD,Transport
+2026-04-16,Electric Utility Bill 15,-92.10,USD,Utilities
+2026-05-17,City Pharmacy 16,-33.40,USD,Healthcare
+2026-06-18,Grocery Mart Purchase 17,-67.25,USD,Food
+2026-07-19,Unknown Vendor 18,-41.75,USD,Uncategorized
+2026-08-20,Amazon Prime Order 19,-28.60,USD,Luxuries
+2026-09-21,Starbucks Store #20,-5.80,USD,Food
+2026-10-22,Paid at Corner Cafe #21,-12.50,USD,Food
+2026-11-23,Netflix Subscription 22,-16.99,USD,Luxuries
+2026-12-24,Landlord Corp Monthly Rent 23,-1250.00,USD,Rent
+2026-01-25,Uber Ride 24,-24.30,USD,Transport
+2026-02-26,Electric Utility Bill 25,-92.10,USD,Utilities
+2026-03-27,City Pharmacy 26,-33.40,USD,Healthcare
+2026-04-28,Grocery Mart Purchase 27,-67.25,USD,Food
+2026-05-01,Unknown Vendor 28,-41.75,USD,Uncategorized
+2026-06-02,Amazon Prime Order 29,-28.60,USD,Luxuries
+2026-07-03,Starbucks Store #30,-5.80,USD,Food
+2026-08-04,Paid at Corner Cafe #31,-12.50,USD,Food
+2026-09-05,Netflix Subscription 32,-16.99,USD,Luxuries
+2026-10-06,Landlord Corp Monthly Rent 33,-1250.00,USD,Rent
+2026-11-07,Uber Ride 34,-24.30,USD,Transport
+2026-12-08,Electric Utility Bill 35,-92.10,USD,Utilities
+2026-01-09,City Pharmacy 36,-33.40,USD,Healthcare
+2026-02-10,Grocery Mart Purchase 37,-67.25,USD,Food
+2026-03-11,Unknown Vendor 38,-41.75,USD,Uncategorized
+2026-04-12,Amazon Prime Order 39,-28.60,USD,Luxuries
+2026-05-13,Starbucks Store #40,-5.80,USD,Food
+2026-06-14,Paid at Corner Cafe #41,-12.50,USD,Food
+2026-07-15,Netflix Subscription 42,-16.99,USD,Luxuries
+2026-08-16,Landlord Corp Monthly Rent 43,-1250.00,USD,Rent
+2026-09-17,Uber Ride 44,-24.30,USD,Transport
+2026-10-18,Electric Utility Bill 45,-92.10,USD,Utilities
+2026-11-19,City Pharmacy 46,-33.40,USD,Healthcare
+2026-12-20,Grocery Mart Purchase 47,-67.25,USD,Food
+2026-01-21,Unknown Vendor 48,-41.75,USD,Uncategorized
+2026-02-22,Amazon Prime Order 49,-28.60,USD,Luxuries
+2026-03-23,Starbucks Store #50,-5.80,USD,Food
+2026-04-24,Paid at Corner Cafe #51,-12.50,USD,Food
+2026-05-25,Netflix Subscription 52,-16.99,USD,Luxuries
+2026-06-26,Landlord Corp Monthly Rent 53,-1250.00,USD,Rent
+2026-07-27,Uber Ride 54,-24.30,USD,Transport
+2026-08-28,Electric Utility Bill 55,-92.10,USD,Utilities
+2026-09-01,City Pharmacy 56,-33.40,USD,Healthcare
+2026-10-02,Grocery Mart Purchase 57,-67.25,USD,Food
+2026-11-03,Unknown Vendor 58,-41.75,USD,Uncategorized
+2026-12-04,Amazon Prime Order 59,-28.60,USD,Luxuries
+2026-01-05,Starbucks Store #60,-5.80,USD,Food
+2026-02-06,Paid at Corner Cafe #61,-12.50,USD,Food
+2026-03-07,Netflix Subscription 62,-16.99,USD,Luxuries
+2026-04-08,Landlord Corp Monthly Rent 63,-1250.00,USD,Rent
+2026-05-09,Uber Ride 64,-24.30,USD,Transport
+2026-06-10,Electric Utility Bill 65,-92.10,USD,Utilities
+2026-07-11,City Pharmacy 66,-33.40,USD,Healthcare
+2026-08-12,Grocery Mart Purchase 67,-67.25,USD,Food
+2026-09-13,Unknown Vendor 68,-41.75,USD,Uncategorized
+2026-10-14,Amazon Prime Order 69,-28.60,USD,Luxuries
+2026-11-15,Starbucks Store #70,-5.80,USD,Food
+2026-12-16,Paid at Corner Cafe #71,-12.50,USD,Food
+2026-01-17,Netflix Subscription 72,-16.99,USD,Luxuries
+2026-02-18,Landlord Corp Monthly Rent 73,-1250.00,USD,Rent
+2026-03-19,Uber Ride 74,-24.30,USD,Transport
+2026-04-20,Electric Utility Bill 75,-92.10,USD,Utilities
+2026-05-21,City Pharmacy 76,-33.40,USD,Healthcare
+2026-06-22,Grocery Mart Purchase 77,-67.25,USD,Food
+2026-07-23,Unknown Vendor 78,-41.75,USD,Uncategorized
+2026-08-24,Amazon Prime Order 79,-28.60,USD,Luxuries
+2026-09-25,Starbucks Store #80,-5.80,USD,Food
+2026-10-26,Paid at Corner Cafe #81,-12.50,USD,Food
+2026-11-27,Netflix Subscription 82,-16.99,USD,Luxuries
+2026-12-28,Landlord Corp Monthly Rent 83,-1250.00,USD,Rent
+2026-01-01,Uber Ride 84,-24.30,USD,Transport
+2026-02-02,Electric Utility Bill 85,-92.10,USD,Utilities
+2026-03-03,City Pharmacy 86,-33.40,USD,Healthcare
+2026-04-04,Grocery Mart Purchase 87,-67.25,USD,Food
+2026-05-05,Unknown Vendor 88,-41.75,USD,Uncategorized
+2026-06-06,Amazon Prime Order 89,-28.60,USD,Luxuries
+2026-07-07,Starbucks Store #90,-5.80,USD,Food
+2026-08-08,Paid at Corner Cafe #91,-12.50,USD,Food
+2026-09-09,Netflix Subscription 92,-16.99,USD,Luxuries
+2026-10-10,Landlord Corp Monthly Rent 93,-1250.00,USD,Rent
+2026-11-11,Uber Ride 94,-24.30,USD,Transport
+2026-12-12,Electric Utility Bill 95,-92.10,USD,Utilities
+2026-01-13,City Pharmacy 96,-33.40,USD,Healthcare
+2026-02-14,Grocery Mart Purchase 97,-67.25,USD,Food
+2026-03-15,Unknown Vendor 98,-41.75,USD,Uncategorized
+2026-04-16,Amazon Prime Order 99,-28.60,USD,Luxuries
+2026-05-17,Starbucks Store #100,-5.80,USD,Food
+2026-06-18,Paid at Corner Cafe #101,-12.50,USD,Food
+2026-07-19,Netflix Subscription 102,-16.99,USD,Luxuries
+2026-08-20,Landlord Corp Monthly Rent 103,-1250.00,USD,Rent
+2026-09-21,Uber Ride 104,-24.30,USD,Transport
+2026-10-22,Electric Utility Bill 105,-92.10,USD,Utilities
+2026-11-23,City Pharmacy 106,-33.40,USD,Healthcare
+2026-12-24,Grocery Mart Purchase 107,-67.25,USD,Food
+2026-01-25,Unknown Vendor 108,-41.75,USD,Uncategorized
+2026-02-26,Amazon Prime Order 109,-28.60,USD,Luxuries
+2026-03-27,Starbucks Store #110,-5.80,USD,Food
+2026-04-28,Paid at Corner Cafe #111,-12.50,USD,Food
+2026-05-01,Netflix Subscription 112,-16.99,USD,Luxuries
+2026-06-02,Landlord Corp Monthly Rent 113,-1250.00,USD,Rent
+2026-07-03,Uber Ride 114,-24.30,USD,Transport
+2026-08-04,Electric Utility Bill 115,-92.10,USD,Utilities
+2026-09-05,City Pharmacy 116,-33.40,USD,Healthcare
+2026-10-06,Grocery Mart Purchase 117,-67.25,USD,Food
+2026-11-07,Unknown Vendor 118,-41.75,USD,Uncategorized
+2026-12-08,Amazon Prime Order 119,-28.60,USD,Luxuries
+2026-01-09,Starbucks Store #120,-5.80,USD,Food

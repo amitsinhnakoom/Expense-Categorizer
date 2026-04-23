@@ -1,0 +1,29 @@
+rules:
+  - rule_id: food_starbucks
+    category: Food
+    match_type: contains
+    pattern: starbucks
+    priority: 100
+    active: true
+
+  - rule_id: food_corner_cafe
+    category: Food
+    match_type: contains
+    pattern: corner cafe
+    priority: 110
+    active: true
+
+  - rule_id: lux_netflix
+    category: Luxuries
+    match_type: contains
+    pattern: netflix
+    priority: 100
+    active: true
+
+  - rule_id: rent_landlord
+    category: Rent
+    match_type: contains
+    pattern: landlord corp
+    priority: 200
+    amount_min: 500
+    active: true
